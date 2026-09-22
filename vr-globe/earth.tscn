@@ -1,6 +1,11 @@
 [gd_scene format=3 uid="uid://dng2mund5ofu6"]
 
+[ext_resource type="Script" uid="uid://jw0flpcj2jl7" path="res://initializeXR.gd" id="1_om26h"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8khxl"]
+
 [node name="Main" type="Node3D" unique_id=1039128907]
+script = ExtResource("1_om26h")
 
 [node name="XROrigin3D" type="XROrigin3D" parent="." unique_id=275354872]
 
@@ -15,4 +20,12 @@ tracker = &"left_hand"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1, -0.5)
 tracker = &"right_hand"
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=2127586434]
+[node name="CSGSphere3D" type="CSGSphere3D" parent="." unique_id=1415270170]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.8944192)
+radial_segments = 16
+rings = 8
+material = SubResource("StandardMaterial3D_8khxl")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1362973882]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1669528924]
