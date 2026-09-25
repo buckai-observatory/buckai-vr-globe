@@ -1,31 +1,71 @@
 [gd_scene format=3 uid="uid://dng2mund5ofu6"]
 
 [ext_resource type="Script" uid="uid://jw0flpcj2jl7" path="res://initializeXR.gd" id="1_om26h"]
+[ext_resource type="PackedScene" uid="uid://b4kad2kuba1yn" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/left_hand_low.tscn" id="2_2bhor"]
+[ext_resource type="PackedScene" uid="uid://l2n30mpbkdyw" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/right_hand_low.tscn" id="3_5i67w"]
+[ext_resource type="PackedScene" uid="uid://diyu06cw06syv" path="res://addons/godot-xr-tools/player/player_body.tscn" id="4_5i67w"]
+[ext_resource type="PackedScene" uid="uid://bl2nuu3qhlb5k" path="res://addons/godot-xr-tools/functions/movement_direct.tscn" id="4_6k2di"]
+[ext_resource type="PackedScene" uid="uid://b6bk2pj8vbj28" path="res://addons/godot-xr-tools/functions/movement_turn.tscn" id="5_wpllb"]
+
+[sub_resource type="Environment" id="Environment_8khxl"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_4ai11"]
+size = Vector2(100, 100)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4ai11"]
+size = Vector3(100, 1, 100)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8khxl"]
 
 [node name="Main" type="Node3D" unique_id=1039128907]
 script = ExtResource("1_om26h")
 
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=2039547042]
+environment = SubResource("Environment_8khxl")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1669528924]
+transform = Transform3D(1, 0, 0, 0, 0.72607756, 0.68761283, 0, -0.68761283, 0.72607756, 0, 9.106395, 12.509842)
+
 [node name="XROrigin3D" type="XROrigin3D" parent="." unique_id=275354872]
 
 [node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D" unique_id=1698360901]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
 
-[node name="LeftHand" type="XRController3D" parent="XROrigin3D" unique_id=1195056725]
+[node name="LeftHandController" type="XRController3D" parent="XROrigin3D" unique_id=1195056725]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1, -0.5)
 tracker = &"left_hand"
 
-[node name="RightHand" type="XRController3D" parent="XROrigin3D" unique_id=1421329534]
+[node name="LeftHand" parent="XROrigin3D/LeftHandController" unique_id=1362824763 instance=ExtResource("2_2bhor")]
+
+[node name="MovementDirect" parent="XROrigin3D/LeftHandController" unique_id=101632591 instance=ExtResource("4_6k2di")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+strafe = true
+
+[node name="RightHandController" type="XRController3D" parent="XROrigin3D" unique_id=1421329534]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1, -0.5)
 tracker = &"right_hand"
 
-[node name="CSGSphere3D" type="CSGSphere3D" parent="." unique_id=1415270170]
+[node name="RightHand" parent="XROrigin3D/RightHandController" unique_id=594102375 instance=ExtResource("3_5i67w")]
+
+[node name="MovementTurn" parent="XROrigin3D/RightHandController" unique_id=81734554 instance=ExtResource("5_wpllb")]
+turn_mode = 2
+
+[node name="PlayerBody" parent="XROrigin3D" unique_id=483348464 instance=ExtResource("4_5i67w")]
+
+[node name="Floor" type="StaticBody3D" parent="." unique_id=1260973864]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor" unique_id=2017311961]
+mesh = SubResource("PlaneMesh_4ai11")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor" unique_id=473986780]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("BoxShape3D_4ai11")
+
+[node name="Objects" type="Node3D" parent="." unique_id=1219518147]
+
+[node name="The Orb" type="CSGSphere3D" parent="Objects" unique_id=1415270170]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.8944192)
 radial_segments = 16
 rings = 8
 material = SubResource("StandardMaterial3D_8khxl")
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1362973882]
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1669528924]
