@@ -6,6 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://diyu06cw06syv" path="res://addons/godot-xr-tools/player/player_body.tscn" id="4_5i67w"]
 [ext_resource type="PackedScene" uid="uid://bl2nuu3qhlb5k" path="res://addons/godot-xr-tools/functions/movement_direct.tscn" id="4_6k2di"]
 [ext_resource type="PackedScene" uid="uid://b6bk2pj8vbj28" path="res://addons/godot-xr-tools/functions/movement_turn.tscn" id="5_wpllb"]
+[ext_resource type="PackedScene" uid="uid://c0830swi6qn0x" path="res://DEM for Godot/BeaverCreek.glb" id="7_wpllb"]
+[ext_resource type="PackedScene" uid="uid://cmeqbrwbyoxxl" path="res://DEM for Godot/Colorado.glb" id="8_lyaad"]
 
 [sub_resource type="Environment" id="Environment_8khxl"]
 
@@ -24,7 +26,8 @@ script = ExtResource("1_om26h")
 environment = SubResource("Environment_8khxl")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1669528924]
-transform = Transform3D(1, 0, 0, 0, 0.72607756, 0.68761283, 0, -0.68761283, 0.72607756, 0, 9.106395, 12.509842)
+transform = Transform3D(-0.7071067, 0.49999997, -0.49999997, 0, 0.70710677, 0.70710677, 0.7071067, 0.49999997, -0.49999997, 0, 20, 1.988)
+layers = 128
 
 [node name="XROrigin3D" type="XROrigin3D" parent="." unique_id=275354872]
 
@@ -56,11 +59,19 @@ turn_mode = 2
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Floor" unique_id=2017311961]
+visible = false
 mesh = SubResource("PlaneMesh_4ai11")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Floor" unique_id=473986780]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_4ai11")
+
+[node name="BeaverCreek" parent="Floor" unique_id=1873171729 instance=ExtResource("7_wpllb")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -50, -16, 50)
+visible = false
+
+[node name="Colorado" parent="Floor" unique_id=1775502301 instance=ExtResource("8_lyaad")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -50, -16, 50)
 
 [node name="Objects" type="Node3D" parent="." unique_id=1219518147]
 
