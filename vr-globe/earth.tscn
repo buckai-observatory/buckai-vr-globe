@@ -7,7 +7,8 @@
 [ext_resource type="PackedScene" uid="uid://bl2nuu3qhlb5k" path="res://addons/godot-xr-tools/functions/movement_direct.tscn" id="4_6k2di"]
 [ext_resource type="PackedScene" uid="uid://b6bk2pj8vbj28" path="res://addons/godot-xr-tools/functions/movement_turn.tscn" id="5_wpllb"]
 [ext_resource type="PackedScene" uid="uid://c0830swi6qn0x" path="res://DEM for Godot/BeaverCreek.glb" id="7_wpllb"]
-[ext_resource type="PackedScene" uid="uid://cmeqbrwbyoxxl" path="res://DEM for Godot/Colorado.glb" id="8_lyaad"]
+[ext_resource type="Script" uid="uid://dbp0l5syxm2al" path="res://globe.gd" id="8_lyaad"]
+[ext_resource type="Script" uid="uid://c5c4xpj43auds" path="res://DEM for Godot/beaver_creek.gd" id="9_xlwm0"]
 
 [sub_resource type="Environment" id="Environment_8khxl"]
 
@@ -19,17 +20,29 @@ size = Vector3(100, 1, 100)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8khxl"]
 
+[sub_resource type="SphereMesh" id="SphereMesh_j33lp"]
+radius = 1080.0
+height = 2160.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_8khxl"]
+
 [node name="Main" type="Node3D" unique_id=1039128907]
 script = ExtResource("1_om26h")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=2039547042]
 environment = SubResource("Environment_8khxl")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1669528924]
+[node name="Lighting" type="DirectionalLight3D" parent="." unique_id=1669528924]
+transform = Transform3D(-0.42403474, -0.7822604, -0.4563587, 0.16300966, -0.5615994, 0.811193, -0.8908549, 0.2695831, 0.3656536, 0, 20, 1.988)
+layers = 128
+
+[node name="LocalSunConventional" type="DirectionalLight3D" parent="Lighting" unique_id=366946271]
 transform = Transform3D(-0.7071067, 0.49999997, -0.49999997, 0, 0.70710677, 0.70710677, 0.7071067, 0.49999997, -0.49999997, 0, 20, 1.988)
+visible = false
 layers = 128
 
 [node name="XROrigin3D" type="XROrigin3D" parent="." unique_id=275354872]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
 
 [node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D" unique_id=1698360901]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
@@ -58,7 +71,7 @@ turn_mode = 2
 [node name="Floor" type="StaticBody3D" parent="." unique_id=1260973864]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor" unique_id=2017311961]
+[node name="FloorMesh" type="MeshInstance3D" parent="Floor" unique_id=2017311961]
 visible = false
 mesh = SubResource("PlaneMesh_4ai11")
 
@@ -67,16 +80,28 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_4ai11")
 
 [node name="BeaverCreek" parent="Floor" unique_id=1873171729 instance=ExtResource("7_wpllb")]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -50, -16, 50)
-visible = false
-
-[node name="Colorado" parent="Floor" unique_id=1775502301 instance=ExtResource("8_lyaad")]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -50, -16, 50)
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -50, -16.030212, 50)
 
 [node name="Objects" type="Node3D" parent="." unique_id=1219518147]
+visible = false
 
 [node name="The Orb" type="CSGSphere3D" parent="Objects" unique_id=1415270170]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.8944192)
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, -2.8944192)
 radial_segments = 16
 rings = 8
 material = SubResource("StandardMaterial3D_8khxl")
+
+[node name="Globe" type="MeshInstance3D" parent="." unique_id=1071227456]
+transform = Transform3D(0.005, 0, 0, 0, 0.005, 0, 0, 0, 0.005, 0.062236786, -2.457255, -6.2927327)
+mesh = SubResource("SphereMesh_j33lp")
+script = ExtResource("8_lyaad")
+
+[node name="BeaverCreek" parent="Globe" unique_id=207944543 instance=ExtResource("7_wpllb")]
+transform = Transform3D(0.1, 0, 0, 0, 0.09999998, 0, 0, 0, 0.1, 0, 0, 0)
+script = ExtResource("9_xlwm0")
+
+[node name="PrimeMeridianEquator" type="MeshInstance3D" parent="Globe" unique_id=2133069712]
+transform = Transform3D(-8.742278e-07, -20, 0, 20, -8.742278e-07, 0, 0, 0, 20, 1080.0001, 0, 0)
+mesh = SubResource("CylinderMesh_8khxl")
+
+[connection signal="button_pressed" from="XROrigin3D/LeftHandController" to="Globe" method="_on_left_hand_controller_button_pressed"]
