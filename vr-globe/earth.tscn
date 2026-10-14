@@ -7,10 +7,14 @@
 [ext_resource type="PackedScene" uid="uid://bl2nuu3qhlb5k" path="res://addons/godot-xr-tools/functions/movement_direct.tscn" id="4_6k2di"]
 [ext_resource type="PackedScene" uid="uid://b6bk2pj8vbj28" path="res://addons/godot-xr-tools/functions/movement_turn.tscn" id="5_wpllb"]
 [ext_resource type="PackedScene" uid="uid://c0830swi6qn0x" path="res://DEM for Godot/BeaverCreek.glb" id="7_wpllb"]
+[ext_resource type="Texture2D" uid="uid://whl7ykd36kkj" path="res://earthRGB.jpg" id="8_brxpe"]
 [ext_resource type="Script" uid="uid://dbp0l5syxm2al" path="res://globe.gd" id="8_lyaad"]
 [ext_resource type="Script" uid="uid://c5c4xpj43auds" path="res://DEM for Godot/beaver_creek.gd" id="9_xlwm0"]
 
 [sub_resource type="Environment" id="Environment_8khxl"]
+background_mode = 2
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_sky_contribution = 0.0
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_4ai11"]
 size = Vector2(100, 100)
@@ -20,7 +24,11 @@ size = Vector3(100, 1, 100)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8khxl"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jdvs3"]
+albedo_texture = ExtResource("8_brxpe")
+
 [sub_resource type="SphereMesh" id="SphereMesh_j33lp"]
+material = SubResource("StandardMaterial3D_jdvs3")
 radius = 1080.0
 height = 2160.0
 
@@ -33,7 +41,8 @@ script = ExtResource("1_om26h")
 environment = SubResource("Environment_8khxl")
 
 [node name="Lighting" type="DirectionalLight3D" parent="." unique_id=1669528924]
-transform = Transform3D(-0.42403474, -0.7822604, -0.4563587, 0.16300966, -0.5615994, 0.811193, -0.8908549, 0.2695831, 0.3656536, 0, 20, 1.988)
+transform = Transform3D(0.76693237, 0.06943994, -0.6379598, 0.2718406, -0.9356815, 0.22495103, -0.5813066, -0.3459457, -0.73648095, 0, 20, 1.988)
+visible = false
 layers = 128
 
 [node name="LocalSunConventional" type="DirectionalLight3D" parent="Lighting" unique_id=366946271]
@@ -81,6 +90,7 @@ shape = SubResource("BoxShape3D_4ai11")
 
 [node name="BeaverCreek" parent="Floor" unique_id=1873171729 instance=ExtResource("7_wpllb")]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -50, -16.030212, 50)
+visible = false
 
 [node name="Objects" type="Node3D" parent="." unique_id=1219518147]
 visible = false
@@ -101,7 +111,7 @@ transform = Transform3D(0.1, 0, 0, 0, 0.09999998, 0, 0, 0, 0.1, 0, 0, 0)
 script = ExtResource("9_xlwm0")
 
 [node name="PrimeMeridianEquator" type="MeshInstance3D" parent="Globe" unique_id=2133069712]
-transform = Transform3D(-8.742278e-07, -20, 0, 20, -8.742278e-07, 0, 0, 0, 20, 1080.0001, 0, 0)
+transform = Transform3D(20, 0, 0, 0, -8.742278e-07, -20, 0, 20, -8.742278e-07, 0, 0, -1080)
 mesh = SubResource("CylinderMesh_8khxl")
 
 [connection signal="button_pressed" from="XROrigin3D/LeftHandController" to="Globe" method="_on_left_hand_controller_button_pressed"]
