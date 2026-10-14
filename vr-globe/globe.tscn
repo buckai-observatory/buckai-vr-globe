@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://5cpee1pl36sr"]
+
+[ext_resource type="Texture2D" uid="uid://whl7ykd36kkj" path="res://earthRGB.jpg" id="1_fksog"]
+[ext_resource type="Script" uid="uid://dbp0l5syxm2al" path="res://globe.gd" id="2_3yww6"]
+[ext_resource type="Script" uid="uid://c5c4xpj43auds" path="res://DEM for Godot/beaver_creek.gd" id="3_reg5e"]
+[ext_resource type="PackedScene" uid="uid://c0830swi6qn0x" path="res://DEM for Godot/BeaverCreek.glb" id="4_rbo3y"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jdvs3"]
+albedo_texture = ExtResource("1_fksog")
+
+[sub_resource type="SphereMesh" id="SphereMesh_j33lp"]
+material = SubResource("StandardMaterial3D_jdvs3")
+radius = 3963.0
+height = 7900.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_8khxl"]
+
+[node name="Globe" type="MeshInstance3D" unique_id=1195548952]
+transform = Transform3D(0.001, 0, 0, 0, 0.001, 0, 0, 0, 0.001, 0, 0, 0)
+mesh = SubResource("SphereMesh_j33lp")
+script = ExtResource("2_3yww6")
+
+[node name="LatLongRotator" type="Node3D" parent="." unique_id=775411008]
+transform = Transform3D(1, 0, 0, 0, 1.0000001, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("3_reg5e")
+
+[node name="ScaleDown100" type="Node3D" parent="LatLongRotator" unique_id=442036775]
+transform = Transform3D(0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0)
+
+[node name="BeaverCreekCenter" type="Node3D" parent="LatLongRotator/ScaleDown100" unique_id=341776352]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, -396300.03)
+
+[node name="BeaverCreek" parent="LatLongRotator/ScaleDown100/BeaverCreekCenter" unique_id=1873171729 instance=ExtResource("4_rbo3y")]
+transform = Transform3D(-1, 1.509958e-07, -6.600236e-15, 0, -4.371139e-08, -1, -1.509958e-07, -1, 4.371139e-08, 100, -100, 0)
+
+[node name="PrimeMeridianEquator" type="MeshInstance3D" parent="." unique_id=231806855]
+transform = Transform3D(20, 0, 0, 0, -8.742278e-07, -20, 0, 20, -8.742278e-07, 0, 0, -3963)
+mesh = SubResource("CylinderMesh_8khxl")
