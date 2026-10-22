@@ -1,0 +1,124 @@
+[gd_scene format=3 uid="uid://drvykyt1nm6sn"]
+
+[ext_resource type="Script" uid="uid://jw0flpcj2jl7" path="res://initializeXR.gd" id="1_s4b60"]
+[ext_resource type="PackedScene" uid="uid://btknduttnmoxf" path="res://addons/godot-xr-tools/misc/vr_common_shader_cache.tscn" id="2_aleyb"]
+[ext_resource type="PackedScene" uid="uid://bx1xdisoqo1f6" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/left_tac_glove_low.tscn" id="3_cwvs2"]
+[ext_resource type="PackedScene" uid="uid://chumpejwiub7f" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/right_tac_glove_low.tscn" id="4_0k2is"]
+[ext_resource type="PackedScene" uid="uid://bl2nuu3qhlb5k" path="res://addons/godot-xr-tools/functions/movement_direct.tscn" id="4_0riqv"]
+[ext_resource type="PackedScene" uid="uid://b4ysuy43poobf" path="res://addons/godot-xr-tools/functions/function_pickup.tscn" id="5_k2bj1"]
+[ext_resource type="PackedScene" uid="uid://b6bk2pj8vbj28" path="res://addons/godot-xr-tools/functions/movement_turn.tscn" id="6_h7ebp"]
+[ext_resource type="PackedScene" uid="uid://diyu06cw06syv" path="res://addons/godot-xr-tools/player/player_body.tscn" id="7_yl1iv"]
+[ext_resource type="Texture2D" uid="uid://whl7ykd36kkj" path="res://earthRGB.jpg" id="9_eksym"]
+[ext_resource type="PackedScene" uid="uid://dg3gr6ofd8yx4" path="res://addons/godot-xr-tools/functions/movement_world_grab.tscn" id="10_eksym"]
+[ext_resource type="PackedScene" uid="uid://57q7hhomocdh" path="res://addons/godot-xr-tools/objects/world_grab_area.tscn" id="12_xmuux"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_0riqv"]
+
+[sub_resource type="Sky" id="Sky_03lqn"]
+sky_material = SubResource("PanoramaSkyMaterial_0riqv")
+
+[sub_resource type="Environment" id="Environment_h3ls4"]
+background_mode = 2
+sky = SubResource("Sky_03lqn")
+ambient_light_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0yjuf"]
+shading_mode = 0
+albedo_texture = ExtResource("9_eksym")
+
+[sub_resource type="SphereMesh" id="SphereMesh_xmuux"]
+material = SubResource("StandardMaterial3D_0yjuf")
+radius = 50.0
+height = 100.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u8n0v"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_vh1bg"]
+radius = 50.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_6aegm"]
+radius = 80.0
+
+[node name="ResizableEarth" type="Node3D" unique_id=1305850180]
+script = ExtResource("1_s4b60")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=113567663]
+environment = SubResource("Environment_h3ls4")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1275074034]
+transform = Transform3D(1, 0, 0, 0, 0.01404223, 0.9999014, 0, -0.9999014, 0.01404223, 0, 0, 0)
+
+[node name="XROrigin3D" type="XROrigin3D" parent="." unique_id=114524054]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, 0)
+
+[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D" unique_id=72164377]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
+far = 300.0
+
+[node name="VRCommonShaderCache" parent="XROrigin3D/XRCamera3D" unique_id=655135794 instance=ExtResource("2_aleyb")]
+
+[node name="LeftController" type="XRController3D" parent="XROrigin3D" unique_id=1000714415]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1, -0.5)
+tracker = &"left_hand"
+pose = &"grip"
+show_when_tracked = true
+
+[node name="LeftHand" parent="XROrigin3D/LeftController" unique_id=345067242 instance=ExtResource("3_cwvs2")]
+
+[node name="MovementDirect" parent="XROrigin3D/LeftController" unique_id=1461043164 instance=ExtResource("4_0riqv")]
+strafe = true
+
+[node name="FunctionPickup" parent="XROrigin3D/LeftController" unique_id=574259026 instance=ExtResource("5_k2bj1")]
+transform = Transform3D(1, 0, 0, 0, 0.70710677, 0.70710677, 0, -0.70710677, 0.70710677, 0, 0, 0)
+grab_distance = 10.0
+
+[node name="RightController" type="XRController3D" parent="XROrigin3D" unique_id=1095238554]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1, -0.56)
+tracker = &"right_hand"
+pose = &"grip"
+show_when_tracked = true
+
+[node name="RightHand" parent="XROrigin3D/RightController" unique_id=1258304275 instance=ExtResource("4_0k2is")]
+
+[node name="MovementTurn" parent="XROrigin3D/RightController" unique_id=774688634 instance=ExtResource("6_h7ebp")]
+
+[node name="FunctionPickup" parent="XROrigin3D/RightController" unique_id=869470183 instance=ExtResource("5_k2bj1")]
+transform = Transform3D(1, 0, 0, 0, 0.70710677, 0.70710677, 0, -0.70710677, 0.70710677, 0, 0, 0)
+grab_distance = 10.0
+
+[node name="PlayerBody" parent="XROrigin3D" unique_id=586106871 instance=ExtResource("7_yl1iv")]
+
+[node name="MovementWorldGrab" parent="XROrigin3D" unique_id=2102178966 instance=ExtResource("10_eksym")]
+world_scale_min = 0.01
+world_scale_max = 100.0
+
+[node name="GrayCollider" type="Node3D" parent="." unique_id=1032777838]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="GrayCollider" unique_id=331569457]
+transform = Transform3D(0.99, 0, 0, 0, 0.99, 0, 0, 0, 0.99, 0, 0, 0)
+
+[node name="GrayMaterialOverrideSphere" type="MeshInstance3D" parent="GrayCollider/StaticBody3D" unique_id=380742749]
+mesh = SubResource("SphereMesh_xmuux")
+surface_material_override/0 = SubResource("ShaderMaterial_u8n0v")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GrayCollider/StaticBody3D" unique_id=1614269419]
+shape = SubResource("SphereShape3D_vh1bg")
+
+[node name="Gravity" type="Area3D" parent="." unique_id=533600688]
+collision_layer = 0
+collision_mask = 524292
+gravity_space_override = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Gravity" unique_id=2112169503]
+shape = SubResource("SphereShape3D_6aegm")
+
+[node name="WorldGrabArea" parent="." unique_id=1995616930 instance=ExtResource("12_xmuux")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 65.98488, 52.053497, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="WorldGrabArea" unique_id=1145839161]
+mesh = SubResource("SphereMesh_xmuux")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WorldGrabArea" unique_id=1979350396]
+shape = SubResource("SphereShape3D_vh1bg")
+
+[node name="Node3D" type="Node3D" parent="." unique_id=571164333]
