@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://diyu06cw06syv" path="res://addons/godot-xr-tools/player/player_body.tscn" id="7_yl1iv"]
 [ext_resource type="Texture2D" uid="uid://whl7ykd36kkj" path="res://earthRGB.jpg" id="9_eksym"]
 [ext_resource type="Script" uid="uid://dpypy5ja75eke" path="res://passthrough.gd" id="10_h7ebp"]
+[ext_resource type="Script" uid="uid://dofwnudtk4b4w" path="res://globe_rotation.gd" id="10_yl1iv"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_0riqv"]
 
@@ -88,22 +89,38 @@ grab_distance = 10.0
 [node name="PlayerBody" parent="XROrigin3D" unique_id=586106871 instance=ExtResource("7_yl1iv")]
 
 [node name="Globe" type="Node3D" parent="." unique_id=1032777838]
+script = ExtResource("10_yl1iv")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Globe" unique_id=331569457]
+[node name="GlobeAheadOrigin" type="Node3D" parent="Globe" unique_id=586557801]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, -82.24861)
+visible = false
 
-[node name="GrayMaterialOverrideSphere" type="MeshInstance3D" parent="Globe/StaticBody3D" unique_id=380742749]
+[node name="GlobeBody" type="StaticBody3D" parent="Globe/GlobeAheadOrigin" unique_id=681159605]
+
+[node name="SphereMesh" type="MeshInstance3D" parent="Globe/GlobeAheadOrigin/GlobeBody" unique_id=707537181]
 mesh = SubResource("SphereMesh_xmuux")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Globe/StaticBody3D" unique_id=1614269419]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Globe/GlobeAheadOrigin/GlobeBody" unique_id=663438387]
 shape = SubResource("SphereShape3D_vh1bg")
 
-[node name="Gravity" type="Area3D" parent="." unique_id=533600688]
+[node name="GlobeUnderfootOrigin" type="Node3D" parent="Globe" unique_id=366830461]
+
+[node name="Gravity" type="Area3D" parent="Globe/GlobeUnderfootOrigin" unique_id=533600688]
 collision_layer = 0
 collision_mask = 524292
 gravity_space_override = 3
 gravity_point = true
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Gravity" unique_id=2112169503]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Globe/GlobeUnderfootOrigin/Gravity" unique_id=2112169503]
 shape = SubResource("SphereShape3D_6aegm")
 
+[node name="GlobeBody" type="StaticBody3D" parent="Globe/GlobeUnderfootOrigin" unique_id=2126345925]
+
+[node name="SphereMesh" type="MeshInstance3D" parent="Globe/GlobeUnderfootOrigin/GlobeBody" unique_id=1878096601]
+mesh = SubResource("SphereMesh_xmuux")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Globe/GlobeUnderfootOrigin/GlobeBody" unique_id=684578260]
+shape = SubResource("SphereShape3D_vh1bg")
+
 [connection signal="button_pressed" from="XROrigin3D/RightController" to="Passthrough" method="_on_right_controller_button_pressed"]
+[connection signal="button_pressed" from="XROrigin3D/RightController" to="Globe" method="_on_right_controller_button_pressed"]
