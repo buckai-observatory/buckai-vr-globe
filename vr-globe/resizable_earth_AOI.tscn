@@ -13,6 +13,7 @@
 [ext_resource type="Script" uid="uid://dpypy5ja75eke" path="res://passthrough.gd" id="10_h7ebp"]
 [ext_resource type="Script" uid="uid://6fcxlul76vmg" path="res://position_AOI.gd" id="12_ttxvs"]
 [ext_resource type="PackedScene" uid="uid://c0830swi6qn0x" path="res://DEM for Godot/BeaverCreek.glb" id="13_l8dun"]
+[ext_resource type="Script" uid="uid://eybrh6xxmhdp" path="res://resize_AOI.gd" id="13_ppdel"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_0riqv"]
 
@@ -37,6 +38,9 @@ height = 100.0
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_vh1bg"]
 radius = 50.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_8khxl"]
+size = Vector3(20, 1, 20)
 
 [node name="ResizableEarth" type="Node3D" unique_id=1305850180]
 script = ExtResource("1_s4b60")
@@ -127,11 +131,34 @@ script = ExtResource("12_ttxvs")
 latitude = 39.613
 longitude = -106.533
 
-[node name="BeaverCreekCenter" type="Node3D" parent="EarthRotationControl/PlayerScaleControl/Globe/GlobeUnderfootOrigin/BeaverCreekPivot" unique_id=2044003495]
-transform = Transform3D(0.003, 0, 0, 0, 0.003, 0, 0, 0, 0.003, 0, 0, -50)
+[node name="ScaleDown1000" type="Node3D" parent="EarthRotationControl/PlayerScaleControl/Globe/GlobeUnderfootOrigin/BeaverCreekPivot" unique_id=547306559]
+transform = Transform3D(0.001, 0, 0, 0, 0.001, 0, 0, 0, 0.001, 0, 0, -50)
 
-[node name="BeaverCreek" parent="EarthRotationControl/PlayerScaleControl/Globe/GlobeUnderfootOrigin/BeaverCreekPivot/BeaverCreekCenter" unique_id=1873171729 instance=ExtResource("13_l8dun")]
+[node name="BeaverCreekCenter" type="Node3D" parent="EarthRotationControl/PlayerScaleControl/Globe/GlobeUnderfootOrigin/BeaverCreekPivot/ScaleDown1000" unique_id=2044003495]
+transform = Transform3D(0.63083524, -1.8800355e-08, -9.400182e-09, 1.8800357e-08, 0.63083524, 9.6351826e-08, 9.400178e-09, -9.6351826e-08, 0.63083524, -2.861023e-06, 8.106232e-06, -7.6293945e-06)
+script = ExtResource("13_ppdel")
+
+[node name="BeaverCreek" parent="EarthRotationControl/PlayerScaleControl/Globe/GlobeUnderfootOrigin/BeaverCreekPivot/ScaleDown1000/BeaverCreekCenter" unique_id=1873171729 instance=ExtResource("13_l8dun")]
 transform = Transform3D(-1, 8.742278e-08, -3.821371e-15, 0, -4.371139e-08, -1, -8.742278e-08, -1, 4.371139e-08, 100, -100, 0)
+
+[node name="OhioPivot" type="Node3D" parent="EarthRotationControl/PlayerScaleControl/Globe/GlobeUnderfootOrigin" unique_id=107408566]
+transform = Transform3D(0.1257661, -0.64263093, -0.7557834, 0, 0.76183236, -0.6477743, 0.99205995, 0.081468046, 0.095812686, 0, 0, 0)
+script = ExtResource("12_ttxvs")
+latitude = 40.374
+longitude = -82.775
+
+[node name="ScaleDown1000" type="Node3D" parent="EarthRotationControl/PlayerScaleControl/Globe/GlobeUnderfootOrigin/OhioPivot" unique_id=1801228133]
+transform = Transform3D(0.001, 0, 0, 0, 0.001, 0, 0, 0, 0.001, 0, 0, -50)
+
+[node name="OhioCenter" type="Node3D" parent="EarthRotationControl/PlayerScaleControl/Globe/GlobeUnderfootOrigin/OhioPivot/ScaleDown1000" unique_id=1652169341]
+transform = Transform3D(139.41458, 0, 0, 0, 139.41458, 0, 0, 0, 139.41458, 0, 0, 0)
+script = ExtResource("13_ppdel")
+aoi_width_in_mi_irl = 221.0
+aoi_width_in_m_godot = 20.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="EarthRotationControl/PlayerScaleControl/Globe/GlobeUnderfootOrigin/OhioPivot/ScaleDown1000/OhioCenter" unique_id=325816779]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
+mesh = SubResource("BoxMesh_8khxl")
 
 [connection signal="button_pressed" from="EarthRotationControl/XROrigin3D/LeftController" to="EarthRotationControl" method="_on_left_controller_button_pressed"]
 [connection signal="button_pressed" from="EarthRotationControl/XROrigin3D/LeftController" to="EarthRotationControl/PlayerScaleControl" method="_on_left_controller_button_pressed"]

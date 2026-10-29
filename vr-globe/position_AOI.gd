@@ -12,6 +12,7 @@ extends Node3D
 	set(new_longitude):
 		longitude = new_longitude
 		update_rotation(latitude, longitude)
+	
 		
 func update_rotation(lat: float, long: float) -> void:
 	rotation = Vector3.ZERO
@@ -21,3 +22,6 @@ func update_rotation(lat: float, long: float) -> void:
 	print("latitude = " + str(lat))
 	print("longitude = " + str(long))
 	print()
+
+
+	
