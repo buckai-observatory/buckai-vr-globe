@@ -1,0 +1,141 @@
+[gd_scene format=3 uid="uid://dlugtyx0k1g5e"]
+
+[ext_resource type="Script" uid="uid://jw0flpcj2jl7" path="res://initializeXR.gd" id="1_s4b60"]
+[ext_resource type="PackedScene" uid="uid://btknduttnmoxf" path="res://addons/godot-xr-tools/misc/vr_common_shader_cache.tscn" id="2_aleyb"]
+[ext_resource type="PackedScene" uid="uid://bx1xdisoqo1f6" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/left_tac_glove_low.tscn" id="3_cwvs2"]
+[ext_resource type="Script" uid="uid://bgarl1s3x180o" path="res://player_scale_control.gd" id="3_yl1iv"]
+[ext_resource type="PackedScene" uid="uid://chumpejwiub7f" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/right_tac_glove_low.tscn" id="4_0k2is"]
+[ext_resource type="PackedScene" uid="uid://bl2nuu3qhlb5k" path="res://addons/godot-xr-tools/functions/movement_direct.tscn" id="4_0riqv"]
+[ext_resource type="PackedScene" uid="uid://b4ysuy43poobf" path="res://addons/godot-xr-tools/functions/function_pickup.tscn" id="5_k2bj1"]
+[ext_resource type="PackedScene" uid="uid://b6bk2pj8vbj28" path="res://addons/godot-xr-tools/functions/movement_turn.tscn" id="6_h7ebp"]
+[ext_resource type="PackedScene" uid="uid://diyu06cw06syv" path="res://addons/godot-xr-tools/player/player_body.tscn" id="7_yl1iv"]
+[ext_resource type="Texture2D" uid="uid://whl7ykd36kkj" path="res://earthRGB.jpg" id="9_eksym"]
+[ext_resource type="Script" uid="uid://dpypy5ja75eke" path="res://passthrough.gd" id="10_h7ebp"]
+[ext_resource type="Script" uid="uid://6fcxlul76vmg" path="res://position_AOI.gd" id="12_ttxvs"]
+[ext_resource type="PackedScene" uid="uid://c0830swi6qn0x" path="res://DEM for Godot/BeaverCreek.glb" id="13_l8dun"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_0riqv"]
+
+[sub_resource type="Sky" id="Sky_03lqn"]
+sky_material = SubResource("PanoramaSkyMaterial_0riqv")
+
+[sub_resource type="Environment" id="Environment_h3ls4"]
+background_mode = 1
+sky = SubResource("Sky_03lqn")
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_6aegm"]
+radius = 200.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0yjuf"]
+shading_mode = 0
+albedo_texture = ExtResource("9_eksym")
+
+[sub_resource type="SphereMesh" id="SphereMesh_xmuux"]
+material = SubResource("StandardMaterial3D_0yjuf")
+radius = 50.0
+height = 100.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_vh1bg"]
+radius = 50.0
+
+[node name="ResizableEarth" type="Node3D" unique_id=1305850180]
+script = ExtResource("1_s4b60")
+
+[node name="Passthrough" type="Node3D" parent="." unique_id=792749812]
+script = ExtResource("10_h7ebp")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Passthrough" unique_id=113567663]
+environment = SubResource("Environment_h3ls4")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1275074034]
+transform = Transform3D(1, 0, 0, 0, 0.01404223, 0.9999014, 0, -0.9999014, 0.01404223, 0, 0, 0)
+
+[node name="EarthRotationControl" type="Node3D" parent="." unique_id=890346381]
+
+[node name="XROrigin3D" type="XROrigin3D" parent="EarthRotationControl" unique_id=114524054]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, 0)
+
+[node name="XRCamera3D" type="XRCamera3D" parent="EarthRotationControl/XROrigin3D" unique_id=72164377]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
+far = 300.0
+
+[node name="VRCommonShaderCache" parent="EarthRotationControl/XROrigin3D/XRCamera3D" unique_id=655135794 instance=ExtResource("2_aleyb")]
+
+[node name="LeftController" type="XRController3D" parent="EarthRotationControl/XROrigin3D" unique_id=1000714415]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1, -0.5)
+tracker = &"left_hand"
+pose = &"grip"
+show_when_tracked = true
+
+[node name="LeftHand" parent="EarthRotationControl/XROrigin3D/LeftController" unique_id=345067242 instance=ExtResource("3_cwvs2")]
+
+[node name="MovementDirect" parent="EarthRotationControl/XROrigin3D/LeftController" unique_id=1461043164 instance=ExtResource("4_0riqv")]
+strafe = true
+
+[node name="FunctionPickup" parent="EarthRotationControl/XROrigin3D/LeftController" unique_id=574259026 instance=ExtResource("5_k2bj1")]
+transform = Transform3D(1, 0, 0, 0, 0.70710677, 0.70710677, 0, -0.70710677, 0.70710677, 0, 0, 0)
+grab_distance = 10.0
+
+[node name="RightController" type="XRController3D" parent="EarthRotationControl/XROrigin3D" unique_id=1095238554]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1, -0.56)
+tracker = &"right_hand"
+pose = &"grip"
+show_when_tracked = true
+
+[node name="RightHand" parent="EarthRotationControl/XROrigin3D/RightController" unique_id=1258304275 instance=ExtResource("4_0k2is")]
+
+[node name="MovementTurn" parent="EarthRotationControl/XROrigin3D/RightController" unique_id=774688634 instance=ExtResource("6_h7ebp")]
+
+[node name="FunctionPickup" parent="EarthRotationControl/XROrigin3D/RightController" unique_id=869470183 instance=ExtResource("5_k2bj1")]
+transform = Transform3D(1, 0, 0, 0, 0.70710677, 0.70710677, 0, -0.70710677, 0.70710677, 0, 0, 0)
+grab_distance = 10.0
+
+[node name="PlayerBody" parent="EarthRotationControl/XROrigin3D" unique_id=586106871 instance=ExtResource("7_yl1iv")]
+
+[node name="PlayerScaleControl" type="Node3D" parent="EarthRotationControl" unique_id=1333941683]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, 0)
+script = ExtResource("3_yl1iv")
+scale_factor = 1.05
+max_size = 10.0
+min_size = 0.1
+
+[node name="Globe" type="Node3D" parent="EarthRotationControl/PlayerScaleControl" unique_id=1032777838]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -50, 0)
+
+[node name="GlobeUnderfootOrigin" type="Node3D" parent="EarthRotationControl/PlayerScaleControl/Globe" unique_id=366830461]
+
+[node name="Gravity" type="Area3D" parent="EarthRotationControl/PlayerScaleControl/Globe/GlobeUnderfootOrigin" unique_id=533600688]
+collision_layer = 0
+collision_mask = 524292
+gravity_space_override = 3
+gravity_point = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EarthRotationControl/PlayerScaleControl/Globe/GlobeUnderfootOrigin/Gravity" unique_id=2112169503]
+shape = SubResource("SphereShape3D_6aegm")
+
+[node name="GlobeBody" type="StaticBody3D" parent="EarthRotationControl/PlayerScaleControl/Globe/GlobeUnderfootOrigin" unique_id=2126345925]
+
+[node name="SphereMesh" type="MeshInstance3D" parent="EarthRotationControl/PlayerScaleControl/Globe/GlobeUnderfootOrigin/GlobeBody" unique_id=1878096601]
+mesh = SubResource("SphereMesh_xmuux")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EarthRotationControl/PlayerScaleControl/Globe/GlobeUnderfootOrigin/GlobeBody" unique_id=684578260]
+shape = SubResource("SphereShape3D_vh1bg")
+
+[node name="BeaverCreekPivot" type="Node3D" parent="EarthRotationControl/PlayerScaleControl/Globe/GlobeUnderfootOrigin" unique_id=1809254324]
+transform = Transform3D(-0.28456753, -0.61123794, -0.7385185, 0, 0.7703686, -0.6375988, 0.95865595, -0.18143994, -0.2192219, 0, 0, 0)
+script = ExtResource("12_ttxvs")
+latitude = 39.613
+longitude = -106.533
+
+[node name="BeaverCreekCenter" type="Node3D" parent="EarthRotationControl/PlayerScaleControl/Globe/GlobeUnderfootOrigin/BeaverCreekPivot" unique_id=2044003495]
+transform = Transform3D(0.003, 0, 0, 0, 0.003, 0, 0, 0, 0.003, 0, 0, -50)
+
+[node name="BeaverCreek" parent="EarthRotationControl/PlayerScaleControl/Globe/GlobeUnderfootOrigin/BeaverCreekPivot/BeaverCreekCenter" unique_id=1873171729 instance=ExtResource("13_l8dun")]
+transform = Transform3D(-1, 8.742278e-08, -3.821371e-15, 0, -4.371139e-08, -1, -8.742278e-08, -1, 4.371139e-08, 100, -100, 0)
+
+[connection signal="button_pressed" from="EarthRotationControl/XROrigin3D/LeftController" to="EarthRotationControl" method="_on_left_controller_button_pressed"]
+[connection signal="button_pressed" from="EarthRotationControl/XROrigin3D/LeftController" to="EarthRotationControl/PlayerScaleControl" method="_on_left_controller_button_pressed"]
+[connection signal="input_float_changed" from="EarthRotationControl/XROrigin3D/LeftController" to="EarthRotationControl/PlayerScaleControl" method="_on_left_controller_input_float_changed"]
+[connection signal="button_pressed" from="EarthRotationControl/XROrigin3D/RightController" to="Passthrough" method="_on_right_controller_button_pressed"]
+[connection signal="button_pressed" from="EarthRotationControl/XROrigin3D/RightController" to="EarthRotationControl/PlayerScaleControl/Globe" method="_on_right_controller_button_pressed"]
+[connection signal="input_float_changed" from="EarthRotationControl/XROrigin3D/RightController" to="EarthRotationControl/PlayerScaleControl" method="_on_right_controller_input_float_changed"]

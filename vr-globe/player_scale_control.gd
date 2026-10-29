@@ -8,8 +8,7 @@ extends Node3D
 enum GrowState { GROWING, SHRINKING, NONE }
 var state: GrowState = GrowState.NONE
 
-
-
+# print info to console
 func _on_left_controller_button_pressed(action_name: String) -> void:
 	if (action_name == "by_button"):
 		print(state)
