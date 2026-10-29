@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://jw0flpcj2jl7" path="res://initializeXR.gd" id="1_s4b60"]
 [ext_resource type="PackedScene" uid="uid://btknduttnmoxf" path="res://addons/godot-xr-tools/misc/vr_common_shader_cache.tscn" id="2_aleyb"]
 [ext_resource type="PackedScene" uid="uid://bx1xdisoqo1f6" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/left_tac_glove_low.tscn" id="3_cwvs2"]
+[ext_resource type="Script" uid="uid://bgarl1s3x180o" path="res://player_scale_control.gd" id="3_yl1iv"]
 [ext_resource type="PackedScene" uid="uid://chumpejwiub7f" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/right_tac_glove_low.tscn" id="4_0k2is"]
 [ext_resource type="PackedScene" uid="uid://bl2nuu3qhlb5k" path="res://addons/godot-xr-tools/functions/movement_direct.tscn" id="4_0riqv"]
 [ext_resource type="PackedScene" uid="uid://b4ysuy43poobf" path="res://addons/godot-xr-tools/functions/function_pickup.tscn" id="5_k2bj1"]
@@ -20,6 +21,9 @@ sky_material = SubResource("PanoramaSkyMaterial_0riqv")
 background_mode = 1
 sky = SubResource("Sky_03lqn")
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_6aegm"]
+radius = 200.0
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0yjuf"]
 shading_mode = 0
 albedo_texture = ExtResource("9_eksym")
@@ -31,23 +35,6 @@ height = 100.0
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_vh1bg"]
 radius = 50.0
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_6aegm"]
-radius = 80.0
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_4ai11"]
-size = Vector3(300, 1, 300)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j33lp"]
-transparency = 1
-albedo_color = Color(0.29803923, 0.78039217, 0.4392157, 0.4627451)
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_8khxl"]
-material = SubResource("StandardMaterial3D_j33lp")
-size = Vector2(300, 300)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_8khxl"]
-size = Vector3(300, 10, 300)
 
 [node name="ResizableEarth" type="Node3D" unique_id=1305850180]
 script = ExtResource("1_s4b60")
@@ -103,54 +90,38 @@ grab_distance = 10.0
 
 [node name="PlayerBody" parent="EarthRotationControl/XROrigin3D" unique_id=586106871 instance=ExtResource("7_yl1iv")]
 
-[node name="Globe" type="Node3D" parent="EarthRotationControl" unique_id=1032777838]
+[node name="PlayerScaleControl" type="Node3D" parent="EarthRotationControl" unique_id=1333941683]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, 0)
+script = ExtResource("3_yl1iv")
+scale_factor = 1.05
+max_size = 10.0
+min_size = 0.1
 
-[node name="GlobeAheadOrigin" type="Node3D" parent="EarthRotationControl/Globe" unique_id=586557801]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, -82.24861)
-visible = false
+[node name="Globe" type="Node3D" parent="EarthRotationControl/PlayerScaleControl" unique_id=1032777838]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -50, 0)
 
-[node name="GlobeBody" type="StaticBody3D" parent="EarthRotationControl/Globe/GlobeAheadOrigin" unique_id=681159605]
+[node name="GlobeUnderfootOrigin" type="Node3D" parent="EarthRotationControl/PlayerScaleControl/Globe" unique_id=366830461]
 
-[node name="SphereMesh" type="MeshInstance3D" parent="EarthRotationControl/Globe/GlobeAheadOrigin/GlobeBody" unique_id=707537181]
-mesh = SubResource("SphereMesh_xmuux")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="EarthRotationControl/Globe/GlobeAheadOrigin/GlobeBody" unique_id=663438387]
-shape = SubResource("SphereShape3D_vh1bg")
-
-[node name="GlobeUnderfootOrigin" type="Node3D" parent="EarthRotationControl/Globe" unique_id=366830461]
-
-[node name="Gravity" type="Area3D" parent="EarthRotationControl/Globe/GlobeUnderfootOrigin" unique_id=533600688]
+[node name="Gravity" type="Area3D" parent="EarthRotationControl/PlayerScaleControl/Globe/GlobeUnderfootOrigin" unique_id=533600688]
 collision_layer = 0
 collision_mask = 524292
 gravity_space_override = 3
 gravity_point = true
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="EarthRotationControl/Globe/GlobeUnderfootOrigin/Gravity" unique_id=2112169503]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EarthRotationControl/PlayerScaleControl/Globe/GlobeUnderfootOrigin/Gravity" unique_id=2112169503]
 shape = SubResource("SphereShape3D_6aegm")
 
-[node name="GlobeBody" type="StaticBody3D" parent="EarthRotationControl/Globe/GlobeUnderfootOrigin" unique_id=2126345925]
+[node name="GlobeBody" type="StaticBody3D" parent="EarthRotationControl/PlayerScaleControl/Globe/GlobeUnderfootOrigin" unique_id=2126345925]
 
-[node name="SphereMesh" type="MeshInstance3D" parent="EarthRotationControl/Globe/GlobeUnderfootOrigin/GlobeBody" unique_id=1878096601]
+[node name="SphereMesh" type="MeshInstance3D" parent="EarthRotationControl/PlayerScaleControl/Globe/GlobeUnderfootOrigin/GlobeBody" unique_id=1878096601]
 mesh = SubResource("SphereMesh_xmuux")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="EarthRotationControl/Globe/GlobeUnderfootOrigin/GlobeBody" unique_id=684578260]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EarthRotationControl/PlayerScaleControl/Globe/GlobeUnderfootOrigin/GlobeBody" unique_id=684578260]
 shape = SubResource("SphereShape3D_vh1bg")
 
-[node name="GroundPlane" type="StaticBody3D" parent="EarthRotationControl/Globe" unique_id=13659388]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="EarthRotationControl/Globe/GroundPlane" unique_id=1049691754]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
-shape = SubResource("BoxShape3D_4ai11")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="EarthRotationControl/Globe/GroundPlane" unique_id=79778413]
-mesh = SubResource("PlaneMesh_8khxl")
-
-[node name="PlaneGravity" type="Area3D" parent="EarthRotationControl/Globe" unique_id=40538632]
-gravity_space_override = 3
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="EarthRotationControl/Globe/PlaneGravity" unique_id=2100797547]
-shape = SubResource("BoxShape3D_8khxl")
-
 [connection signal="button_pressed" from="EarthRotationControl/XROrigin3D/LeftController" to="EarthRotationControl" method="_on_left_controller_button_pressed"]
+[connection signal="button_pressed" from="EarthRotationControl/XROrigin3D/LeftController" to="EarthRotationControl/PlayerScaleControl" method="_on_left_controller_button_pressed"]
+[connection signal="input_float_changed" from="EarthRotationControl/XROrigin3D/LeftController" to="EarthRotationControl/PlayerScaleControl" method="_on_left_controller_input_float_changed"]
 [connection signal="button_pressed" from="EarthRotationControl/XROrigin3D/RightController" to="Passthrough" method="_on_right_controller_button_pressed"]
-[connection signal="button_pressed" from="EarthRotationControl/XROrigin3D/RightController" to="EarthRotationControl/Globe" method="_on_right_controller_button_pressed"]
+[connection signal="button_pressed" from="EarthRotationControl/XROrigin3D/RightController" to="EarthRotationControl/PlayerScaleControl/Globe" method="_on_right_controller_button_pressed"]
+[connection signal="input_float_changed" from="EarthRotationControl/XROrigin3D/RightController" to="EarthRotationControl/PlayerScaleControl" method="_on_right_controller_input_float_changed"]
