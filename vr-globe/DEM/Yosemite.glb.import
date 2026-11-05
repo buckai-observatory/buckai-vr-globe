@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://c6dnkns5rfkye"
-path="res://.godot/imported/Yosemite.glb-8353be517b0fd629df64b1f3dd07edfc.scn"
+path="res://.godot/imported/Yosemite.glb-5ca0eb7f6eb16d6b0e3fe6ffcad97014.scn"
 
 [deps]
 
-source_file="res://DEM for Godot/Yosemite.glb"
-dest_files=["res://.godot/imported/Yosemite.glb-8353be517b0fd629df64b1f3dd07edfc.scn"]
+source_file="res://DEM/Yosemite.glb"
+dest_files=["res://.godot/imported/Yosemite.glb-5ca0eb7f6eb16d6b0e3fe6ffcad97014.scn"]
 
 [params]
 
