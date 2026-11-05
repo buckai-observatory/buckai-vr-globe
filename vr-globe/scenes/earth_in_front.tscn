@@ -1,20 +1,21 @@
 [gd_scene format=3 uid="uid://dlugtyx0k1g5e"]
 
-[ext_resource type="Script" uid="uid://jw0flpcj2jl7" path="res://initializeXR.gd" id="1_s4b60"]
+[ext_resource type="Script" uid="uid://jw0flpcj2jl7" path="res://scripts/initializeXR.gd" id="1_s4b60"]
 [ext_resource type="PackedScene" uid="uid://btknduttnmoxf" path="res://addons/godot-xr-tools/misc/vr_common_shader_cache.tscn" id="2_aleyb"]
+[ext_resource type="Script" uid="uid://ko81xtfpjdsf" path="res://scripts/set_active_action_set.gd" id="2_gtyur"]
 [ext_resource type="PackedScene" uid="uid://bx1xdisoqo1f6" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/left_tac_glove_low.tscn" id="3_cwvs2"]
-[ext_resource type="Script" uid="uid://bgarl1s3x180o" path="res://player_scale_control.gd" id="3_yl1iv"]
 [ext_resource type="PackedScene" uid="uid://chumpejwiub7f" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/right_tac_glove_low.tscn" id="4_0k2is"]
 [ext_resource type="PackedScene" uid="uid://bl2nuu3qhlb5k" path="res://addons/godot-xr-tools/functions/movement_direct.tscn" id="4_0riqv"]
-[ext_resource type="PackedScene" uid="uid://b4ysuy43poobf" path="res://addons/godot-xr-tools/functions/function_pickup.tscn" id="5_k2bj1"]
 [ext_resource type="PackedScene" uid="uid://b6bk2pj8vbj28" path="res://addons/godot-xr-tools/functions/movement_turn.tscn" id="6_h7ebp"]
 [ext_resource type="PackedScene" uid="uid://diyu06cw06syv" path="res://addons/godot-xr-tools/player/player_body.tscn" id="7_yl1iv"]
-[ext_resource type="Texture2D" uid="uid://whl7ykd36kkj" path="res://earthRGB.jpg" id="9_eksym"]
-[ext_resource type="Script" uid="uid://dpypy5ja75eke" path="res://passthrough.gd" id="10_h7ebp"]
-[ext_resource type="Script" uid="uid://6fcxlul76vmg" path="res://position_AOI.gd" id="12_ttxvs"]
-[ext_resource type="PackedScene" uid="uid://c0830swi6qn0x" path="res://DEM for Godot/BeaverCreek.glb" id="13_l8dun"]
-[ext_resource type="Script" uid="uid://eybrh6xxmhdp" path="res://resize_AOI.gd" id="13_ppdel"]
-[ext_resource type="PackedScene" uid="uid://c6dnkns5rfkye" path="res://DEM for Godot/Yosemite.glb" id="15_gyfa7"]
+[ext_resource type="Texture2D" uid="uid://whl7ykd36kkj" path="res://assets/earthRGB.jpg" id="9_eksym"]
+[ext_resource type="Script" uid="uid://dwret5pumc0be" path="res://scenes/earth_rotation_control.gd" id="10_gtyur"]
+[ext_resource type="Script" uid="uid://dpypy5ja75eke" path="res://scripts/passthrough.gd" id="10_h7ebp"]
+[ext_resource type="Script" uid="uid://duu5rnahfrau8" path="res://scripts/earth_scale_control.gd" id="10_oyayv"]
+[ext_resource type="Script" uid="uid://6fcxlul76vmg" path="res://scripts/position_AOI.gd" id="12_ttxvs"]
+[ext_resource type="PackedScene" uid="uid://c0830swi6qn0x" path="res://DEM/BeaverCreek.glb" id="13_l8dun"]
+[ext_resource type="Script" uid="uid://eybrh6xxmhdp" path="res://scripts/resize_AOI.gd" id="13_ppdel"]
+[ext_resource type="PackedScene" uid="uid://c6dnkns5rfkye" path="res://DEM/Yosemite.glb" id="15_gyfa7"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_0riqv"]
 
@@ -25,9 +26,6 @@ sky_material = SubResource("PanoramaSkyMaterial_0riqv")
 background_mode = 1
 sky = SubResource("Sky_03lqn")
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_6aegm"]
-radius = 200.0
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0yjuf"]
 shading_mode = 0
 albedo_texture = ExtResource("9_eksym")
@@ -37,14 +35,27 @@ material = SubResource("StandardMaterial3D_0yjuf")
 radius = 50.0
 height = 100.0
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_vh1bg"]
-radius = 50.0
-
 [sub_resource type="BoxMesh" id="BoxMesh_8khxl"]
 size = Vector3(20, 1, 20)
 
-[node name="ResizableEarth" type="Node3D" unique_id=1305850180]
+[sub_resource type="PlaneMesh" id="PlaneMesh_4ai11"]
+size = Vector2(300, 300)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j33lp"]
+transparency = 1
+albedo_color = Color(0.827451, 0.5686275, 0.7921569, 0.3254902)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8khxl"]
+size = Vector3(300, 1, 300)
+
+[node name="EarthInFront" type="Node3D" unique_id=1305850180]
 script = ExtResource("1_s4b60")
+
+[node name="XRActionSets" type="Node3D" parent="." unique_id=961553199]
+script = ExtResource("2_gtyur")
+
+[node name="Timer" type="Timer" parent="XRActionSets" unique_id=833240259]
+one_shot = true
 
 [node name="Passthrough" type="Node3D" parent="." unique_id=792749812]
 script = ExtResource("10_h7ebp")
@@ -55,133 +66,117 @@ environment = SubResource("Environment_h3ls4")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1275074034]
 transform = Transform3D(1, 0, 0, 0, 0.01404223, 0.9999014, 0, -0.9999014, 0.01404223, 0, 0, 0)
 
-[node name="EarthRotationControl" type="Node3D" parent="." unique_id=890346381]
+[node name="XROrigin3D" type="XROrigin3D" parent="." unique_id=114524054]
+transform = Transform3D(0.99829113, 0, 0.058436226, 0, 1, 0, -0.058436226, 0, 0.99829113, 59.57293, 0, -0.085739136)
 
-[node name="XROrigin3D" type="XROrigin3D" parent="EarthRotationControl" unique_id=114524054]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, 0)
-
-[node name="XRCamera3D" type="XRCamera3D" parent="EarthRotationControl/XROrigin3D" unique_id=72164377]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
+[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D" unique_id=72164377]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 1.7, 0)
 far = 300.0
 
-[node name="VRCommonShaderCache" parent="EarthRotationControl/XROrigin3D/XRCamera3D" unique_id=655135794 instance=ExtResource("2_aleyb")]
+[node name="VRCommonShaderCache" parent="XROrigin3D/XRCamera3D" unique_id=655135794 instance=ExtResource("2_aleyb")]
 
-[node name="LeftController" type="XRController3D" parent="EarthRotationControl/XROrigin3D" unique_id=1000714415]
+[node name="LeftController" type="XRController3D" parent="XROrigin3D" unique_id=1000714415]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1, -0.5)
 tracker = &"left_hand"
 pose = &"grip"
 show_when_tracked = true
 
-[node name="LeftHand" parent="EarthRotationControl/XROrigin3D/LeftController" unique_id=345067242 instance=ExtResource("3_cwvs2")]
+[node name="LeftHand" parent="XROrigin3D/LeftController" unique_id=345067242 instance=ExtResource("3_cwvs2")]
 
-[node name="MovementDirect" parent="EarthRotationControl/XROrigin3D/LeftController" unique_id=1461043164 instance=ExtResource("4_0riqv")]
+[node name="MovementDirect" parent="XROrigin3D/LeftController" unique_id=224492271 instance=ExtResource("4_0riqv")]
 strafe = true
 
-[node name="FunctionPickup" parent="EarthRotationControl/XROrigin3D/LeftController" unique_id=574259026 instance=ExtResource("5_k2bj1")]
-transform = Transform3D(1, 0, 0, 0, 0.70710677, 0.70710677, 0, -0.70710677, 0.70710677, 0, 0, 0)
-grab_distance = 10.0
-
-[node name="RightController" type="XRController3D" parent="EarthRotationControl/XROrigin3D" unique_id=1095238554]
+[node name="RightController" type="XRController3D" parent="XROrigin3D" unique_id=1095238554]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1, -0.56)
 tracker = &"right_hand"
 pose = &"grip"
 show_when_tracked = true
 
-[node name="RightHand" parent="EarthRotationControl/XROrigin3D/RightController" unique_id=1258304275 instance=ExtResource("4_0k2is")]
+[node name="RightHand" parent="XROrigin3D/RightController" unique_id=1258304275 instance=ExtResource("4_0k2is")]
 
-[node name="MovementTurn" parent="EarthRotationControl/XROrigin3D/RightController" unique_id=774688634 instance=ExtResource("6_h7ebp")]
+[node name="MovementTurn" parent="XROrigin3D/RightController" unique_id=774688634 instance=ExtResource("6_h7ebp")]
 
-[node name="FunctionPickup" parent="EarthRotationControl/XROrigin3D/RightController" unique_id=869470183 instance=ExtResource("5_k2bj1")]
-transform = Transform3D(1, 0, 0, 0, 0.70710677, 0.70710677, 0, -0.70710677, 0.70710677, 0, 0, 0)
-grab_distance = 10.0
+[node name="PlayerBody" parent="XROrigin3D" unique_id=586106871 instance=ExtResource("7_yl1iv")]
 
-[node name="PlayerBody" parent="EarthRotationControl/XROrigin3D" unique_id=586106871 instance=ExtResource("7_yl1iv")]
-
-[node name="PlayerScaleControl" type="Node3D" parent="EarthRotationControl" unique_id=1333941683]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, 0)
-script = ExtResource("3_yl1iv")
-scale_factor = 1.05
+[node name="GlobeScaleControl" type="Node3D" parent="." unique_id=1333941683]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 50)
+script = ExtResource("10_oyayv")
 max_size = 10.0
 min_size = 0.1
 
-[node name="Globe" type="Node3D" parent="EarthRotationControl/PlayerScaleControl" unique_id=1032777838]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -50, 0)
+[node name="GlobeInFront" type="Node3D" parent="GlobeScaleControl" unique_id=366830461]
+transform = Transform3D(0.94004, 0.34042382, -0.02088841, -0.34056795, 0.94021237, -0.0036835421, 0.01838569, 0.01057668, 0.99977475, 0, 0, -50)
+script = ExtResource("10_gtyur")
+angular_velocity = 0.01
 
-[node name="GlobeUnderfootOrigin" type="Node3D" parent="EarthRotationControl/PlayerScaleControl/Globe" unique_id=366830461]
-
-[node name="Gravity" type="Area3D" parent="EarthRotationControl/PlayerScaleControl/Globe/GlobeUnderfootOrigin" unique_id=533600688]
-collision_layer = 0
-collision_mask = 524292
-gravity_space_override = 3
-gravity_point = true
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="EarthRotationControl/PlayerScaleControl/Globe/GlobeUnderfootOrigin/Gravity" unique_id=2112169503]
-shape = SubResource("SphereShape3D_6aegm")
-
-[node name="GlobeBody" type="StaticBody3D" parent="EarthRotationControl/PlayerScaleControl/Globe/GlobeUnderfootOrigin" unique_id=2126345925]
-
-[node name="SphereMesh" type="MeshInstance3D" parent="EarthRotationControl/PlayerScaleControl/Globe/GlobeUnderfootOrigin/GlobeBody" unique_id=1878096601]
+[node name="SphereMesh" type="MeshInstance3D" parent="GlobeScaleControl/GlobeInFront" unique_id=1878096601]
 mesh = SubResource("SphereMesh_xmuux")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="EarthRotationControl/PlayerScaleControl/Globe/GlobeUnderfootOrigin/GlobeBody" unique_id=684578260]
-shape = SubResource("SphereShape3D_vh1bg")
-
-[node name="OhioPivot" type="Node3D" parent="EarthRotationControl/PlayerScaleControl/Globe/GlobeUnderfootOrigin" unique_id=107408566]
+[node name="OhioPivot" type="Node3D" parent="GlobeScaleControl/GlobeInFront" unique_id=107408566]
 transform = Transform3D(0.1257661, -0.64263093, -0.7557834, 0, 0.76183236, -0.6477743, 0.99205995, 0.081468046, 0.095812686, 0, 0, 0)
 script = ExtResource("12_ttxvs")
 latitude = 40.374
 longitude = -82.775
 
-[node name="ScaleDown1000" type="Node3D" parent="EarthRotationControl/PlayerScaleControl/Globe/GlobeUnderfootOrigin/OhioPivot" unique_id=1801228133]
+[node name="ScaleDown1000" type="Node3D" parent="GlobeScaleControl/GlobeInFront/OhioPivot" unique_id=1801228133]
 transform = Transform3D(0.001, 0, 0, 0, 0.001, 0, 0, 0, 0.001, 0, 0, -50)
 
-[node name="OhioCenter" type="Node3D" parent="EarthRotationControl/PlayerScaleControl/Globe/GlobeUnderfootOrigin/OhioPivot/ScaleDown1000" unique_id=1652169341]
+[node name="OhioCenter" type="Node3D" parent="GlobeScaleControl/GlobeInFront/OhioPivot/ScaleDown1000" unique_id=1652169341]
 transform = Transform3D(139.41458, 0, 0, 0, 139.41458, 0, 0, 0, 139.41458, 0, 0, 0)
 script = ExtResource("13_ppdel")
 aoi_width_in_mi_irl = 221.0
 aoi_width_in_m_godot = 20.0
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="EarthRotationControl/PlayerScaleControl/Globe/GlobeUnderfootOrigin/OhioPivot/ScaleDown1000/OhioCenter" unique_id=325816779]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="GlobeScaleControl/GlobeInFront/OhioPivot/ScaleDown1000/OhioCenter" unique_id=325816779]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
 mesh = SubResource("BoxMesh_8khxl")
 
-[node name="BeaverCreekPivot" type="Node3D" parent="EarthRotationControl/PlayerScaleControl/Globe/GlobeUnderfootOrigin" unique_id=1809254324]
-transform = Transform3D(-0.28456753, -0.61123794, -0.7385185, 1.4901161e-08, 0.7703686, -0.63759875, 0.95865595, -0.18143994, -0.21922189, 0, 0, 0)
+[node name="BeaverCreekPivot" type="Node3D" parent="GlobeScaleControl/GlobeInFront" unique_id=1809254324]
+transform = Transform3D(-0.28456753, -0.6112378, -0.73851836, 0, 0.77036846, -0.6375987, 0.95865595, -0.1814399, -0.21922186, 0, 0, 0)
 script = ExtResource("12_ttxvs")
 latitude = 39.613
 longitude = -106.533
 
-[node name="ScaleDown1000" type="Node3D" parent="EarthRotationControl/PlayerScaleControl/Globe/GlobeUnderfootOrigin/BeaverCreekPivot" unique_id=547306559]
+[node name="ScaleDown1000" type="Node3D" parent="GlobeScaleControl/GlobeInFront/BeaverCreekPivot" unique_id=547306559]
 transform = Transform3D(0.001, 0, 0, 0, 0.001, 0, 0, 0, 0.001, 0, 0, -50)
 
-[node name="BeaverCreekCenter" type="Node3D" parent="EarthRotationControl/PlayerScaleControl/Globe/GlobeUnderfootOrigin/BeaverCreekPivot/ScaleDown1000" unique_id=2044003495]
+[node name="BeaverCreekCenter" type="Node3D" parent="GlobeScaleControl/GlobeInFront/BeaverCreekPivot/ScaleDown1000" unique_id=2044003495]
 transform = Transform3D(0.63083524, -1.8800355e-08, -9.400182e-09, 1.8800357e-08, 0.63083524, 9.6351826e-08, 9.400178e-09, -9.6351826e-08, 0.63083524, -2.861023e-06, 8.106232e-06, -7.6293945e-06)
 script = ExtResource("13_ppdel")
 
-[node name="BeaverCreek" parent="EarthRotationControl/PlayerScaleControl/Globe/GlobeUnderfootOrigin/BeaverCreekPivot/ScaleDown1000/BeaverCreekCenter" unique_id=1873171729 instance=ExtResource("13_l8dun")]
+[node name="BeaverCreek" parent="GlobeScaleControl/GlobeInFront/BeaverCreekPivot/ScaleDown1000/BeaverCreekCenter" unique_id=1873171729 instance=ExtResource("13_l8dun")]
 transform = Transform3D(-1, 8.742278e-08, -3.821371e-15, 0, -4.371139e-08, -1, -8.742278e-08, -1, 4.371139e-08, 100, -100, 0)
 
-[node name="YosemitePivot" type="Node3D" parent="EarthRotationControl/PlayerScaleControl/Globe/GlobeUnderfootOrigin" unique_id=256543128]
+[node name="YosemitePivot" type="Node3D" parent="GlobeScaleControl/GlobeInFront" unique_id=256543128]
 transform = Transform3D(-0.49300063, -0.5340264, -0.6868522, 0, 0.78945905, -0.61380297, 0.870029, -0.30260524, -0.3892038, 0, 0, 0)
 script = ExtResource("12_ttxvs")
 latitude = 37.865
 longitude = -119.538
 
-[node name="ScaleDown1000" type="Node3D" parent="EarthRotationControl/PlayerScaleControl/Globe/GlobeUnderfootOrigin/YosemitePivot" unique_id=1530446482]
+[node name="ScaleDown1000" type="Node3D" parent="GlobeScaleControl/GlobeInFront/YosemitePivot" unique_id=1530446482]
 transform = Transform3D(0.001, 0, 0, 0, 0.001, 0, 0, 0, 0.001, 0, 0, -50)
 
-[node name="YosemiteCenter" type="Node3D" parent="EarthRotationControl/PlayerScaleControl/Globe/GlobeUnderfootOrigin/YosemitePivot/ScaleDown1000" unique_id=1401935503]
+[node name="YosemiteCenter" type="Node3D" parent="GlobeScaleControl/GlobeInFront/YosemitePivot/ScaleDown1000" unique_id=1401935503]
 transform = Transform3D(1.9044082, 0, 0, 0, 1.9044082, 0, 0, 0, 1.9044082, 0, 0, 0)
 script = ExtResource("13_ppdel")
 aoi_width_in_mi_irl = 40.0
 aoi_width_in_m_godot = 265.0
 
-[node name="Yosemite" parent="EarthRotationControl/PlayerScaleControl/Globe/GlobeUnderfootOrigin/YosemitePivot/ScaleDown1000/YosemiteCenter" unique_id=1478261990 instance=ExtResource("15_gyfa7")]
+[node name="Yosemite" parent="GlobeScaleControl/GlobeInFront/YosemitePivot/ScaleDown1000/YosemiteCenter" unique_id=1478261990 instance=ExtResource("15_gyfa7")]
 transform = Transform3D(-1, -8.742278e-08, 3.821371e-15, 0, -4.371139e-08, -1, 8.742278e-08, -1, 4.371139e-08, 132.5, -132.5, 0)
 
-[connection signal="button_pressed" from="EarthRotationControl/XROrigin3D/LeftController" to="EarthRotationControl" method="_on_left_controller_button_pressed"]
-[connection signal="button_pressed" from="EarthRotationControl/XROrigin3D/LeftController" to="EarthRotationControl/PlayerScaleControl" method="_on_left_controller_button_pressed"]
-[connection signal="input_float_changed" from="EarthRotationControl/XROrigin3D/LeftController" to="EarthRotationControl/PlayerScaleControl" method="_on_left_controller_input_float_changed"]
-[connection signal="button_pressed" from="EarthRotationControl/XROrigin3D/RightController" to="Passthrough" method="_on_right_controller_button_pressed"]
-[connection signal="button_pressed" from="EarthRotationControl/XROrigin3D/RightController" to="EarthRotationControl/PlayerScaleControl/Globe" method="_on_right_controller_button_pressed"]
-[connection signal="input_float_changed" from="EarthRotationControl/XROrigin3D/RightController" to="EarthRotationControl/PlayerScaleControl" method="_on_right_controller_input_float_changed"]
+[node name="Floor" type="StaticBody3D" parent="." unique_id=1722053749]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor" unique_id=1187637257]
+mesh = SubResource("PlaneMesh_4ai11")
+surface_material_override/0 = SubResource("StandardMaterial3D_j33lp")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor" unique_id=1158785516]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("BoxShape3D_8khxl")
+
+[connection signal="timeout" from="XRActionSets/Timer" to="XRActionSets" method="_on_timer_timeout"]
+[connection signal="button_pressed" from="XROrigin3D/LeftController" to="GlobeScaleControl/GlobeInFront" method="_on_left_controller_button_pressed"]
+[connection signal="button_pressed" from="XROrigin3D/LeftController" to="XRActionSets" method="_on_left_controller_button_pressed"]
+[connection signal="input_vector2_changed" from="XROrigin3D/LeftController" to="GlobeScaleControl/GlobeInFront" method="_on_left_controller_input_vector_2_changed"]
+[connection signal="input_vector2_changed" from="XROrigin3D/RightController" to="GlobeScaleControl" method="_on_right_controller_input_vector_2_changed"]

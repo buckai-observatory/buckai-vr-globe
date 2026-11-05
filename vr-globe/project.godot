@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="VRGlobe"
-run/main_scene="uid://drvykyt1nm6sn"
+run/main_scene="uid://dlugtyx0k1g5e"
 config/features=PackedStringArray("4.7", "Mobile")
 config/icon="res://icon.svg"
 
