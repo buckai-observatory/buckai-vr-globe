@@ -4,7 +4,7 @@ extends Node3D
 @onready var viewport : Viewport = get_viewport()
 @onready var environment : Environment = $WorldEnvironment.environment
 
-var inVR: bool = true
+var inVR: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

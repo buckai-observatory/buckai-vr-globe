@@ -39,8 +39,9 @@ func _ready():
 		xr_interface.pose_recentered.connect(_on_openxr_pose_recentered)
 	else:
 		# We couldn't start OpenXR.
-		print("OpenXR not instantiated!")
-		get_tree().quit()
+		#print("OpenXR not instantiated!")
+		#get_tree().quit()
+		xr_interface.initialize()
 
 
 # Handle OpenXR session ready

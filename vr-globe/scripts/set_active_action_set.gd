@@ -1,5 +1,7 @@
 extends Node3D
 
+signal switched_to_earth_control
+
 var xr_interface: OpenXRInterface
 
 var allowed_to_switch: bool = true
@@ -21,6 +23,7 @@ func _on_left_controller_button_pressed(action_name: String) -> void:
 			xr_interface.set_action_set_active("godot", false)
 			xr_interface.set_action_set_active("earth_control", true)
 			
+			switched_to_earth_control.emit();
 			
 		elif (action_name == "switch_action_map"):
 			

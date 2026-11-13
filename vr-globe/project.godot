@@ -54,12 +54,18 @@ player/standard_height=1.7
 
 [rendering]
 
-rendering_device/driver.windows="d3d12"
-renderer/rendering_method="gl_compatibility"
+rendering_device/fallback_to_d3d12=false
+rendering_device/fallback_to_opengl3=false
+renderer/rendering_method="mobile"
 textures/vram_compression/import_etc2_astc=true
+anti_aliasing/quality/msaa_3d=1
+vrs/mode=2
 
 [xr]
 
 openxr/enabled=true
 openxr/environment_blend_mode=2
+openxr/foveation_level=3
+openxr/foveation_dynamic=true
 shaders/enabled=true
+openxr/extensions/meta/passthrough=true

@@ -38,6 +38,9 @@ height = 100.0
 [sub_resource type="BoxMesh" id="BoxMesh_8khxl"]
 size = Vector3(20, 1, 20)
 
+[sub_resource type="BoxMesh" id="BoxMesh_j33lp"]
+size = Vector3(3, 3, 3)
+
 [sub_resource type="PlaneMesh" id="PlaneMesh_4ai11"]
 size = Vector2(300, 300)
 
@@ -99,10 +102,8 @@ show_when_tracked = true
 [node name="PlayerBody" parent="XROrigin3D" unique_id=586106871 instance=ExtResource("7_yl1iv")]
 
 [node name="GlobeScaleControl" type="Node3D" parent="." unique_id=1333941683]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 50)
+transform = Transform3D(0.24040084, 0, -0.97067374, 0, 1, 0, 0.97067374, 0, 0.24040084, -0.0052948, 0, -67.45869)
 script = ExtResource("10_oyayv")
-max_size = 10.0
-min_size = 0.1
 
 [node name="GlobeInFront" type="Node3D" parent="GlobeScaleControl" unique_id=366830461]
 transform = Transform3D(0.94004, 0.34042382, -0.02088841, -0.34056795, 0.94021237, -0.0036835421, 0.01838569, 0.01057668, 0.99977475, 0, 0, -50)
@@ -165,9 +166,13 @@ aoi_width_in_m_godot = 265.0
 [node name="Yosemite" parent="GlobeScaleControl/GlobeInFront/YosemitePivot/ScaleDown1000/YosemiteCenter" unique_id=1478261990 instance=ExtResource("15_gyfa7")]
 transform = Transform3D(-1, -8.742278e-08, 3.821371e-15, 0, -4.371139e-08, -1, 8.742278e-08, -1, 4.371139e-08, 132.5, -132.5, 0)
 
+[node name="Marker" type="MeshInstance3D" parent="GlobeScaleControl" unique_id=492194700]
+mesh = SubResource("BoxMesh_j33lp")
+
 [node name="Floor" type="StaticBody3D" parent="." unique_id=1722053749]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Floor" unique_id=1187637257]
+visible = false
 mesh = SubResource("PlaneMesh_4ai11")
 surface_material_override/0 = SubResource("StandardMaterial3D_j33lp")
 
@@ -175,8 +180,10 @@ surface_material_override/0 = SubResource("StandardMaterial3D_j33lp")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_8khxl")
 
+[connection signal="switched_to_earth_control" from="XRActionSets" to="GlobeScaleControl" method="_on_xr_action_sets_switched_to_earth_control"]
 [connection signal="timeout" from="XRActionSets/Timer" to="XRActionSets" method="_on_timer_timeout"]
-[connection signal="button_pressed" from="XROrigin3D/LeftController" to="GlobeScaleControl/GlobeInFront" method="_on_left_controller_button_pressed"]
 [connection signal="button_pressed" from="XROrigin3D/LeftController" to="XRActionSets" method="_on_left_controller_button_pressed"]
+[connection signal="button_pressed" from="XROrigin3D/LeftController" to="GlobeScaleControl/GlobeInFront" method="_on_left_controller_button_pressed"]
 [connection signal="input_vector2_changed" from="XROrigin3D/LeftController" to="GlobeScaleControl/GlobeInFront" method="_on_left_controller_input_vector_2_changed"]
+[connection signal="button_pressed" from="XROrigin3D/RightController" to="Passthrough" method="_on_right_controller_button_pressed"]
 [connection signal="input_vector2_changed" from="XROrigin3D/RightController" to="GlobeScaleControl" method="_on_right_controller_input_vector_2_changed"]

@@ -41,7 +41,6 @@ func _on_left_controller_button_pressed(action_name: String) -> void:
 			var angle_to_rotate: float = acos(earth_up.dot(Vector3.UP))
 			rotate(axis_to_rotate.normalized(), angle_to_rotate)
 
-
 # each frame, rotate earth if the user is holding the joystick in a direction
 func _process(_delta: float) -> void:
 	
