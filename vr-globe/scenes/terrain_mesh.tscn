@@ -1,13 +1,11 @@
 [gd_scene format=3 uid="uid://gkpxf2xkgl16"]
 
-[ext_resource type="Texture2D" uid="uid://bjgpec6lg34jt" path="res://DEM/beaver_creek_dem_texture.png" id="1_1c0w2"]
-[ext_resource type="ArrayMesh" uid="uid://bk3r7dg7x3krm" path="res://DEM/beaver_creek_mesh.tres" id="1_1pn4o"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_24gbq"]
-albedo_texture = ExtResource("1_1c0w2")
+[ext_resource type="ArrayMesh" uid="uid://h8fahc4bhom3" path="res://DEM/beaver_creek_dem.tres" id="2_1c0w2"]
 
 [node name="TerrainMesh" type="Node3D" unique_id=2069875973]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=2024008536]
-material_override = SubResource("StandardMaterial3D_24gbq")
-mesh = ExtResource("1_1pn4o")
+mesh = ExtResource("2_1c0w2")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=916933044]
+transform = Transform3D(1, 0, 0, 0, 0.37784076, 0.9258706, 0, -0.9258706, 0.37784076, 0, 0, 0)

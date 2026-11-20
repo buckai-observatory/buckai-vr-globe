@@ -2,7 +2,7 @@
 extends EditorScript
 
 var file_folder: String = "res://DEM/"
-var file_name: String = "beaver_creek_dem.png"
+var file_name: String = "beaver_creek_dem"
 
 var created_mesh_multiplier: float = 0.1
 
@@ -12,7 +12,7 @@ func _run() :
 func create_mesh():
 	print("creating mesh")
 	
-	var file_path: String = file_folder + file_name
+	var file_path: String = file_folder + file_name + ".png"
 	var image: Image = load(file_path)
 	
 	# NOTE: The maximum image size is 16384×16384 pixels
@@ -42,6 +42,9 @@ func create_mesh():
 	var indices: PackedInt32Array = PackedInt32Array()
 	var uvs: PackedVector2Array = PackedVector2Array()
 	
+	var elevations: PackedByteArray = PackedByteArray()
+	
+	
 	var i: int = 0
 	
 	while (i < color_data.size()):
@@ -53,21 +56,21 @@ func create_mesh():
 		var col = vert_i % image_width
 		var x_pos: float = col * created_mesh_multiplier
 		
-		# image y -> Mesh (z) # TODO: negative z?
+		# image y -> Mesh (z) 
+		# north corresponds to -z, which we want
 		@warning_ignore("integer_division")
 		var row = vert_i / image_width
 		var z_pos: float = row * created_mesh_multiplier
 		
 		# image color -> Mesh y
 		var elevation = color_data[i]
+		elevations.append(elevation)
+		
 		# TODO: height scale is incorrect
 		var y_pos: float = elevation * created_mesh_multiplier
 		
 		var vert: Vector3 = Vector3(x_pos, y_pos, z_pos)
 		vertices.append(vert)
-		
-		# TODO: handle normals more intelligently
-		normals.append(Vector3.UP)
 		
 		var u: float = float(col) / image_width
 		var v: float = float(row) / image_height
@@ -92,8 +95,13 @@ func create_mesh():
 			])
 		
 		# increment by 4 since r = g = b and a doesn't matter
-		i += 4 
-
+		i += 4 	
+	
+	var v: int = 0
+	while (v < elevations.size()):
+		normals.append(compute_normal(v, elevations, image_width, image_height))
+		v += 1
+	
 	
 	var surface_array = []
 	surface_array.resize(Mesh.ARRAY_MAX)
@@ -103,14 +111,37 @@ func create_mesh():
 	surface_array[Mesh.ARRAY_NORMAL] = normals
 	surface_array[Mesh.ARRAY_INDEX] = indices
 
-	var parent: Node3D = EditorInterface.get_edited_scene_root()
-	var node: MeshInstance3D = MeshInstance3D.new()
-	parent.add_child(node)
+	var mesh: Mesh = ArrayMesh.new()
+	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, surface_array)
 	
-	node.mesh = ArrayMesh.new()
-	
-	node.mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, surface_array)
-	
-	ResourceSaver.save(node.mesh, "res://DEM/beaver_creek_mesh.tres", ResourceSaver.FLAG_COMPRESS)
+	var saved_file: String = file_folder + file_name + ".tres"
+	ResourceSaver.save(mesh, saved_file, ResourceSaver.FLAG_COMPRESS)
 
-	node.queue_free()
+
+func compute_normal(i: int, elevation_data: PackedByteArray, width: int, height: int) -> Vector3:
+	
+	var normal: Vector3 = Vector3.UP
+	
+	# TODO: compute normals for edges
+	if (i == 0): # top-left corner
+		return normal
+	elif (i == width - 1): #top-right corner
+		return normal
+	elif (i == (height - 1) * width): #bottom-left corner
+		return normal
+	elif (i == width * height - 1): # bottom-right corner
+		return normal
+	elif (i / width == 0): # top row, non-corner
+		return normal
+	elif (i / width == height - 1): # bottom row, non-corner
+		return normal
+	elif (i % width == 0): # left column, non-corner
+		return normal
+	elif (i % width == width - 1): # right column, non-corner
+		return normal
+	else: # fully surrounded by vertices
+		var x_diff: Vector3 = Vector3(2, (elevation_data[i + 1] - elevation_data[i - 1]), 0)
+		var z_diff: Vector3 = Vector3(0, (elevation_data[i + width] - elevation_data[i - width]), 2)
+		normal = z_diff.cross(x_diff).normalized()
+		
+	return normal
