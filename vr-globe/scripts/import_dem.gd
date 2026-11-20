@@ -17,6 +17,7 @@ func create_mesh():
 	
 	# NOTE: The maximum image size is 16384×16384 pixels
 	var image_width: int = image.get_width()
+	var image_height: int = image.get_height()
 	
 	# format 1D array size: image_width * image_height * 4
 	# each 4 elements correspond to 1 pixel RGBA
@@ -68,7 +69,10 @@ func create_mesh():
 		# TODO: handle normals more intelligently
 		normals.append(Vector3.UP)
 		
-		uvs.append(Vector2(col, row))
+		var u: float = float(col) / image_width
+		var v: float = float(row) / image_height
+		
+		uvs.append(Vector2(u, v))
 		
 		if (row > 0 and col > 0):
 			# indices stores triangles for the mesh as trios of vertex indices
