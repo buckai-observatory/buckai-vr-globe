@@ -1,0 +1,14 @@
+[remap]
+
+importer="image"
+type="Image"
+uid="uid://cq6lvewgs5bnj"
+path="res://.godot/imported/beaver_creek_dem.png-08c5735d559312753245df41a105ba3f.image"
+
+[deps]
+
+source_file="res://DEM/beaver_creek_dem.png"
+dest_files=["res://.godot/imported/beaver_creek_dem.png-08c5735d559312753245df41a105ba3f.image"]
+
+[params]
+

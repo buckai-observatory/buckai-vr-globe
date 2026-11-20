@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://byw4ef7pjh1de"]
+
+[ext_resource type="PackedScene" uid="uid://c6dnkns5rfkye" path="res://DEM/Yosemite.glb" id="1_7qras"]
+
+[node name="YosemiteCenter" type="Node3D" unique_id=162191477]
+transform = Transform3D(1.9044082, 0, 0, 0, 1.9044082, 0, 0, 0, 1.9044082, 0, 0, 0)
+
+[node name="Yosemite" parent="." unique_id=904374041 instance=ExtResource("1_7qras")]
+transform = Transform3D(-1, -1.509958e-07, 6.600236e-15, 0, -4.371139e-08, -1, 1.509958e-07, -1, 4.371139e-08, 132.5, -132.5, 0)

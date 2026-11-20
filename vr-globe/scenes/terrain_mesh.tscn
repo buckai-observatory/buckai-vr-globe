@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://gkpxf2xkgl16"]
+
+[ext_resource type="ArrayMesh" uid="uid://bk3r7dg7x3krm" path="res://DEM/beaver_creek_mesh.tres" id="1_1pn4o"]
+
+[node name="TerrainMesh" type="Node3D" unique_id=2069875973]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=2024008536]
+mesh = ExtResource("1_1pn4o")
